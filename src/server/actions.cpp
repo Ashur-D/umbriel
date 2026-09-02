@@ -788,6 +788,9 @@ namespace umbriel {
 
     bool actionToggleFloating(Server& server, const Keybind& /*bind*/, std::string* /*error*/) {
       if (scratchpadHoldsFocus(server)) {
+        if (ScratchpadManager* scratchpad = server.scratchpadManager()) {
+          scratchpad->resetGeometry(server.outputFromWlr(server.preferredOutput()));
+        }
         return true;
       }
       if (Workspace* workspace = activeWorkspace(server)) {

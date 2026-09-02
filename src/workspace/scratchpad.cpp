@@ -653,4 +653,55 @@ namespace umbriel {
     return restored;
   }
 
+  bool ScratchpadManager::resetGeometry(Output* output) {
+    View* view = focused(output);
+    if (view == nullptr || output == nullptr) {
+      return false;
+    }
+    wlr_box targetArea = output->usableArea();
+    if (targetArea.width <= 0 || targetArea.height <= 0) {
+      wlr_output_layout_get_box(m_server->outputLayout(), output->wlr(), &targetArea);
+    }
+    const auto& spCfg = config().animation.scratchpad;
+    if (spCfg.fullscreen) {
+      if (!view->toplevel()->scheduled.fullscreen && !view->toplevel()->current.fullscreen) {
+        view->toggleFullscreen();
+      }
+    } else if (spCfg.maximize) {
+      if (!view->maximizedToEdges()) {
+        view->toggleMaximizedToEdges();
+      }
+    } else if (spCfg.scale > 0.0 && spCfg.scale <= 1.0 && targetArea.width > 0 && targetArea.height > 0) {
+      if (view->maximizedToEdges()) {
+        view->setMaximizedToEdges(false, false);
+      }
+      if (view->toplevel()->scheduled.fullscreen || view->toplevel()->current.fullscreen) {
+        view->toggleFullscreen();
+      }
+      const int targetW = std::max(100, static_cast<int>(std::lround(targetArea.width * spCfg.scale)));
+      const int targetH = std::max(100, static_cast<int>(std::lround(targetArea.height * spCfg.scale)));
+      wlr_xdg_toplevel_set_size(view->toplevel(), targetW, targetH);
+      const int newX = targetArea.x + std::max(0, (targetArea.width - targetW) / 2);
+      const int newY = targetArea.y + std::max(0, (targetArea.height - targetH) / 2);
+      view->setPosition(newX, newY);
+    } else {
+      if (view->maximizedToEdges()) {
+        view->setMaximizedToEdges(false, false);
+      }
+      if (view->toplevel()->scheduled.fullscreen || view->toplevel()->current.fullscreen) {
+        view->toggleFullscreen();
+      }
+      const int curW = view->presentation().width();
+      const int curH = view->presentation().height();
+      const int targetW = curW > 0 ? curW : view->toplevel()->current.width;
+      const int targetH = curH > 0 ? curH : view->toplevel()->current.height;
+      if (targetW > 0 && targetH > 0 && targetArea.width > 0 && targetArea.height > 0) {
+        const int newX = targetArea.x + std::max(0, (targetArea.width - targetW) / 2);
+        const int newY = targetArea.y + std::max(0, (targetArea.height - targetH) / 2);
+        view->setPosition(newX, newY);
+      }
+    }
+    return true;
+  }
+
 } // namespace umbriel

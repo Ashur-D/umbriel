@@ -44,6 +44,7 @@ namespace umbriel {
     void moveOutput(Output* from, Output* to);
     void releaseOutput(Output* output);
     void applyConfig();
+    bool resetGeometry(Output* output);
     // Return entries to the output they were parked on. Entries whose output is still gone park on `fallback`.
     size_t restoreDisplaced(Output* fallback);
 
