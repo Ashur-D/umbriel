@@ -133,8 +133,9 @@ reference.
 Scratchpad show and hide transitions, backdrop dimming and blur, and optional
 entry sizing are configured under [`animation.scratchpad`](animation.md#animation).
 
-While a scratchpad window has focus, `window-toggle-floating`,
-`window-toggle-pinned`, and `window-center` are inactive. Restore the window
+While a scratchpad window has focus, `window-toggle-floating` resets its size
+and position back to the configured scratchpad scale and centers it.
+`window-toggle-pinned` and `window-center` remain inactive. Restore the window
 before using those actions.
 
 ## Troubleshooting
