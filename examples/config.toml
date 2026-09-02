@@ -37,6 +37,7 @@ honor_restored_maximize = false # let apps restore their saved maximized state
 [workspaces]
 back_and_forth = false
 empty_above = false
+min_workspaces = 1             # minimum number of workspaces to retain on dynamic outputs (1-64)
 
 # Colors ---------------------------------------------------------------------
 

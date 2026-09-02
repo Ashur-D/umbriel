@@ -122,8 +122,10 @@ namespace umbriel {
         || !sameWindowTearingPolicy(before, after);
     const bool directScanoutPolicy =
         outputNamesChanged || outputProjectionChanged(before, after, sameOutputDirectScanoutPolicy);
-    const bool workspaceInventory =
-        outputNamesChanged || outputProjectionChanged(before, after, sameWorkspaceInventory);
+    const bool workspaceInventory = outputNamesChanged
+        || outputProjectionChanged(before, after, sameWorkspaceInventory)
+        || before.workspaces.emptyAbove != after.workspaces.emptyAbove
+        || before.workspaces.minWorkspaces != after.workspaces.minWorkspaces;
     const bool outputLayout = outputNamesChanged || outputProjectionChanged(before, after, sameOutputLayout);
     const bool sceneBlur =
         before.appearance.blur != after.appearance.blur || before.optimizedBlurNeeded() != after.optimizedBlurNeeded();

@@ -146,6 +146,15 @@ UMBRIEL_TEST(eachSectionIsReportedOnItsOwn) {
   }
   {
     Config after;
+    after.workspaces.minWorkspaces = 5;
+    const ConfigChange change = ConfigChange::between(before, after);
+    CHECK(change.workspaces);
+    const ConfigEffects effects = ConfigEffects::between(before, after);
+    CHECK(effects.workspaceInventory);
+    CHECK(effects.workspaceLayout);
+  }
+  {
+    Config after;
     after.animation.windowsMove.durationMs += 1;
     const ConfigChange change = ConfigChange::between(before, after);
     CHECK(change.animation);

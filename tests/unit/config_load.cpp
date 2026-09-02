@@ -600,6 +600,26 @@ UMBRIEL_TEST(hotCornersLoadActionsAndValidate) {
   CHECK(containsDiagnostic(store, "hot_corners.top_right.delay_ms = -1"));
 }
 
+UMBRIEL_TEST(workspacesMinWorkspacesLoads) {
+  const TempConfig file;
+  ConfigStore& store = umbriel::configStore();
+  store.setRootPath(file.path(), true);
+
+  file.write("[workspaces]\nmin_workspaces = 4\n");
+  CHECK(store.reload().success);
+  CHECK_EQ(store.config().workspaces.minWorkspaces, 4);
+
+  file.write("[workspaces]\nmin_workspaces = 0\n");
+  CHECK(store.reload().success);
+  CHECK_EQ(store.config().workspaces.minWorkspaces, 1);
+  CHECK(containsDiagnostic(store, "clamped to 1"));
+
+  file.write("[workspaces]\nmin_workspaces = 100\n");
+  CHECK(store.reload().success);
+  CHECK_EQ(store.config().workspaces.minWorkspaces, 64);
+  CHECK(containsDiagnostic(store, "clamped to 64"));
+}
+
 UMBRIEL_TEST(overviewBackgroundBlurLoads) {
   const TempConfig file;
   ConfigStore& store = umbriel::configStore();

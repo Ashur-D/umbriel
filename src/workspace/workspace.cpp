@@ -1715,15 +1715,19 @@ namespace umbriel {
       backKeeper = m_workspaces.back().get();
     }
 
+    const size_t minWorkspaces = static_cast<size_t>(std::max(1, config().workspaces.minWorkspaces));
     for (size_t index = m_workspaces.size(); index-- > 0;) {
       Workspace* workspace = m_workspaces[index].get();
-      if (!workspace->hasViews() && workspace != backKeeper && workspace != frontKeeper) {
+      if (!workspace->hasViews() && workspace != backKeeper && workspace != frontKeeper && index >= minWorkspaces) {
         if (m_previous == workspace) {
           m_previous = nullptr;
         }
         m_workspaces.erase(m_workspaces.begin() + static_cast<std::ptrdiff_t>(index));
         m_server->scheduleIpcWorkspacesEvent();
       }
+    }
+    while (m_workspaces.size() < minWorkspaces) {
+      appendDynamicWorkspace();
     }
     if (backKeeper == nullptr) {
       appendDynamicWorkspace();

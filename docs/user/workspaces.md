@@ -102,12 +102,14 @@ umbriel workspaces --json | jq -r '.[] | select(.focused).layout'
 [workspaces]
 back_and_forth = true
 empty_above = false
+min_workspaces = 1
 ```
 
 | Key              | Type | Default | Description                                                                                     |
 | ---------------- | ---- | ------- | ----------------------------------------------------------------------------------------------- |
 | `back_and_forth` | bool | `false` | Re-selecting the active workspace jumps back to the previously active workspace on that output. |
 | `empty_above`    | bool | `false` | Add an empty workspace at the start, in addition to the workspace at the end.                    |
+| `min_workspaces` | int  | `1`     | Minimum number of workspaces to retain on dynamic outputs (1-64).                               |
 
 Output workspaces are dynamic by default. The workspace models and rules are
 documented below.

@@ -370,7 +370,8 @@ namespace umbriel {
     ResolvedWorkspaceSet result;
     if (!names) {
       result.dynamic = true;
-      const size_t count = config.workspaces.emptyAbove ? 2 : 1;
+      const size_t minCount = static_cast<size_t>(std::max(1, config.workspaces.minWorkspaces));
+      const size_t count = config.workspaces.emptyAbove ? std::max(minCount, size_t{2}) : minCount;
       result.workspaces.reserve(count);
       for (size_t index = 0; index < count; ++index) {
         const std::string name = std::to_string(index + 1);

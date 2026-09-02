@@ -233,6 +233,17 @@ UMBRIEL_TEST(workspaceInventoryResolvesStaticAndDynamicOutputs) {
     CHECK_EQ(dynamicSetWithEmptyAbove.workspaces[0].name, std::string{"1"});
     CHECK_EQ(dynamicSetWithEmptyAbove.workspaces[1].name, std::string{"2"});
   }
+
+  config.workspaces.emptyAbove = false;
+  config.workspaces.minWorkspaces = 3;
+  const auto dynamicSetWithMin = umbriel::resolveWorkspacesForOutput(config, identity("DP-2"));
+  CHECK(dynamicSetWithMin.dynamic);
+  CHECK_EQ(dynamicSetWithMin.workspaces.size(), size_t{3});
+  if (dynamicSetWithMin.workspaces.size() == 3) {
+    CHECK_EQ(dynamicSetWithMin.workspaces[0].name, std::string{"1"});
+    CHECK_EQ(dynamicSetWithMin.workspaces[1].name, std::string{"2"});
+    CHECK_EQ(dynamicSetWithMin.workspaces[2].name, std::string{"3"});
+  }
 }
 UMBRIEL_TEST(workspaceRulesMatchConnectorAndDescriptorWithoutOutputSection) {
   Config config;
