@@ -153,7 +153,9 @@ described in [Workspace selectors](workspaces.md#workspace-selectors).
 | `workspace-move-to-output-up` | Move every workspace window to the output above |
 | `workspace-move-up` | Move the focused workspace up the list |
 | `workspace-next` | Switch to the next workspace on this output |
+| `workspace-next-non-empty` | Switch to the next non-empty workspace on this output |
 | `workspace-previous` | Switch to the previous workspace on this output |
+| `workspace-previous-non-empty` | Switch to the previous non-empty workspace on this output |
 | `workspace-set-layout:<scrolling\|dwindle\|master\|toggle>` | Set the active workspace's layout mode |
 | `workspace-switch:<workspace>[/<output>]` | Switch to the selected workspace |
 

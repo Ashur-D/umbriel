@@ -131,6 +131,8 @@ namespace umbriel {
     WindowCycleHeightBack,
     WindowFocusLast,
     WorkspaceFocusLast,
+    WorkspaceNextNonEmpty,
+    WorkspacePreviousNonEmpty,
     Count,
   };
 

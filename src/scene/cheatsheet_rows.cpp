@@ -364,7 +364,9 @@ namespace {
     case A::WindowMoveToWorkspaceNext:
     case A::WindowMoveToWorkspacePrevious:
     case A::WorkspaceNext:
+    case A::WorkspaceNextNonEmpty:
     case A::WorkspacePrevious:
+    case A::WorkspacePreviousNonEmpty:
     case A::WorkspaceMoveDown:
     case A::WorkspaceMoveUp:
     case A::WorkspaceSetLayout:

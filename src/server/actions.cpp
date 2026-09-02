@@ -1000,6 +1000,32 @@ namespace umbriel {
     }
 
     template <int Direction>
+    bool actionWorkspaceAdjacentNonEmpty(Server& server, const Keybind& /*bind*/, std::string* /*error*/) {
+      Workspace* workspace = activeWorkspace(server);
+      if (workspace == nullptr) {
+        return true;
+      }
+      WorkspaceGroup* group = workspace->group();
+      if (group == nullptr) {
+        return true;
+      }
+      const size_t total = group->workspaceCount();
+      if (total <= 1) {
+        return true;
+      }
+      const size_t current = group->active()->index();
+      for (size_t step = 1; step < total; ++step) {
+        const size_t targetIndex = (current + static_cast<size_t>(Direction * static_cast<int>(step)) + total) % total;
+        Workspace* candidate = group->workspaceAt(targetIndex);
+        if (candidate != nullptr && candidate->hasViews()) {
+          group->select(candidate);
+          return true;
+        }
+      }
+      return true;
+    }
+
+    template <int Direction>
     bool actionWindowMoveToWorkspaceAdjacent(Server& server, const Keybind& /*bind*/, std::string* /*error*/) {
       Workspace* workspace = activeWorkspace(server);
       if (workspace == nullptr || workspace->group() == nullptr) {
@@ -1412,6 +1438,8 @@ namespace umbriel {
         &actionCycleHeight<-1>,
         &actionWindowFocusLast,
         &actionWorkspaceFocusLast,
+        &actionWorkspaceAdjacentNonEmpty<1>,
+        &actionWorkspaceAdjacentNonEmpty<-1>,
     };
 
     consteval bool everyActionHasHandler() {
